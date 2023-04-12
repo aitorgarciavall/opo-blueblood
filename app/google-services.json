@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "27739840119",
+    "project_id": "opoblueblood-4bccf",
+    "storage_bucket": "opoblueblood-4bccf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27739840119:android:2861336673ff053274f072",
+        "android_client_info": {
+          "package_name": "com.example.opoblueblood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "27739840119-91375347ggboi81i4dh2oohfj768og6e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.opoblueblood",
+            "certificate_hash": "dd3f5df8ac0ac93fb238b1a724e77b05f1b17bde"
+          }
+        },
+        {
+          "client_id": "27739840119-miu11nure6m46hnm5jseaq9nms1tqo4b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzsPGPRodN9yQtUDq2MBu9d9tMuIGs-Ug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "27739840119-gm9il23o27mm7kqj7ct10prn4esr812n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
