@@ -12,6 +12,12 @@
         android:theme="@style/Theme.OpoBlueblood"
         tools:targetApi="31">
         <activity
+            android:name=".ConfigQuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TemesActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
