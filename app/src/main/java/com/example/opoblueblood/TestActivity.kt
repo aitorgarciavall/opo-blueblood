@@ -1,7 +1,10 @@
 package com.example.opoblueblood
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -23,14 +26,21 @@ class TestActivity : AppCompatActivity() {
     private lateinit var answer4: RadioButton
     private lateinit var answerGroup: RadioGroup
     private lateinit var resultText: TextView
+    private lateinit var EditTextPosition: EditText
+    private lateinit var TotalQuestions: EditText
+    var position = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
         nomTema = findViewById(R.id.nomTema)
 
-        // Declarando checkButton como una variable local en onCreate
-        val temaNombre = intent.getStringExtra("tema_nombre") ?: "Error -> Nombre de tema"
+
+        val temaNombre = intent.getStringExtra("tema_nombre") ?: "Error -> Nombre de tema enviado"
+        val questionCount = intent.getIntExtra("question_count", 0) ?: "Error -> Nº de preguntas enviadas"
+
+        Log.d("==================================", "Valor de myVariable: $questionCount")
+
         nomTema.text = temaNombre
         questionText = findViewById(R.id.question_text)
         answerGroup = findViewById(R.id.answer_group)
@@ -38,9 +48,15 @@ class TestActivity : AppCompatActivity() {
         answer2 = findViewById(R.id.answer_2)
         answer3 = findViewById(R.id.answer_3)
         answer4 = findViewById(R.id.answer_4)
+        EditTextPosition = findViewById(R.id.actualPosition)
+        TotalQuestions = findViewById(R.id.totalQuest)
         val nextButton: Button = findViewById(R.id.next_button)
+        // Declarando checkButton como una variable local en onCreate
         val checkButton: Button = findViewById(R.id.check_button)
         resultText = findViewById(R.id.result_text)
+
+        EditTextPosition.setText(position.toString())
+        TotalQuestions.setText(questionCount.toString())
 
         nextButton.setOnClickListener {
             currentQuestion = questions.removeFirst()
@@ -60,6 +76,16 @@ class TestActivity : AppCompatActivity() {
             answer2.isEnabled = true
             answer3.isEnabled = true
             answer4.isEnabled = true
+
+            // Actualizar la posición
+            position += 1
+            EditTextPosition.setText(position.toString())
+
+            if (position == questionCount){
+                nextButton.isEnabled = false
+                nextButton.visibility = View.INVISIBLE
+            }
+
         }
 
         checkButton.setOnClickListener {
@@ -109,7 +135,7 @@ class TestActivity : AppCompatActivity() {
                 val body = response.body()
                 if (body != null) {
                     questions = DoublyLinkedList<Question>()
-                    for (questionResponse in body.preguntas) {
+                    for (questionResponse in body.preguntas.shuffled().take(questionCount as Int)) {
                         val question = Question(
                             questionText = questionResponse.texto,
                             answers = questionResponse.opciones,
