@@ -3,17 +3,15 @@ package com.example.opoblueblood
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+
 
 class TestActivity : AppCompatActivity() {
     private lateinit var questions: DoublyLinkedList<Question>
@@ -28,7 +26,9 @@ class TestActivity : AppCompatActivity() {
     private lateinit var resultText: TextView
     private lateinit var EditTextPosition: EditText
     private lateinit var TotalQuestions: EditText
+    private lateinit var loadingProgress: ProgressBar
     var position = 1
+    private val userAnswers = mutableMapOf<Question, Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +38,6 @@ class TestActivity : AppCompatActivity() {
 
         val temaNombre = intent.getStringExtra("tema_nombre") ?: "Error -> Nombre de tema enviado"
         val questionCount = intent.getIntExtra("question_count", 0) ?: "Error -> Nº de preguntas enviadas"
-
-        Log.d("==================================", "Valor de myVariable: $questionCount")
 
         nomTema.text = temaNombre
         questionText = findViewById(R.id.question_text)
@@ -51,15 +49,44 @@ class TestActivity : AppCompatActivity() {
         EditTextPosition = findViewById(R.id.actualPosition)
         TotalQuestions = findViewById(R.id.totalQuest)
         val nextButton: Button = findViewById(R.id.next_button)
-        // Declarando checkButton como una variable local en onCreate
+        val previousButton: Button = findViewById(R.id.previous_button)
+        previousButton.isEnabled = false
+        previousButton.visibility = View.INVISIBLE
+        nextButton.isEnabled = false  // Deshabilita el botón al inicio
         val checkButton: Button = findViewById(R.id.check_button)
         resultText = findViewById(R.id.result_text)
-
+        loadingProgress = findViewById(R.id.loading_progress)
         EditTextPosition.setText(position.toString())
         TotalQuestions.setText(questionCount.toString())
 
+
+        previousButton.setOnClickListener {
+            currentQuestion = questions.getPrevious()
+            displayQuestion(currentQuestion)
+            // Actualiza la posición y otros elementos de la UI si es necesario
+            position -= 1
+            EditTextPosition.setText(position.toString())
+
+            if (position == 1){
+                previousButton.isEnabled = false
+                previousButton.visibility = View.INVISIBLE
+            }else{
+                previousButton.isEnabled = true
+                previousButton.visibility = View.VISIBLE
+            }
+
+            if (position == questionCount){
+                nextButton.isEnabled = false
+                nextButton.visibility = View.INVISIBLE
+            }else{
+                nextButton.isEnabled = true
+                nextButton.visibility = View.VISIBLE
+            }
+        }
+
         nextButton.setOnClickListener {
-            currentQuestion = questions.removeFirst()
+            //currentQuestion = questions.removeFirst()
+            currentQuestion = questions.getNext()
             displayQuestion(currentQuestion)
             resultText.text = ""
             checkButton.isEnabled = true // Habilita el botón "check" nuevamente
@@ -84,8 +111,18 @@ class TestActivity : AppCompatActivity() {
             if (position == questionCount){
                 nextButton.isEnabled = false
                 nextButton.visibility = View.INVISIBLE
+            }else{
+                nextButton.isEnabled = true
+                nextButton.visibility = View.VISIBLE
             }
 
+            if (position == 1){
+                previousButton.isEnabled = false
+                previousButton.visibility = View.INVISIBLE
+            }else{
+                previousButton.isEnabled = true
+                previousButton.visibility = View.VISIBLE
+            }
         }
 
         checkButton.setOnClickListener {
@@ -95,6 +132,10 @@ class TestActivity : AppCompatActivity() {
                 answer3.isChecked -> 2
                 answer4.isChecked -> 3
                 else -> -1
+            }
+
+            currentQuestion?.let {
+                userAnswers[it] = selectedAnswerIndex
             }
 
             val selectedRadioButton = when (selectedAnswerIndex) {
@@ -120,6 +161,8 @@ class TestActivity : AppCompatActivity() {
                 selectedRadioButton?.isChecked = true
                 selectedRadioButton?.isSelected = true // Esto activará el estado rojo
             }
+
+
         }
 
         val retrofit = Retrofit.Builder()
@@ -129,43 +172,62 @@ class TestActivity : AppCompatActivity() {
 
         val api = retrofit.create(Api::class.java)
 
+        Log.d("API_CALL", "Haciendo llamada a la API...")
         val call = api.getQuestions(temaNombre)
         call.enqueue(object : Callback<QuizResponse> {
             override fun onResponse(call: Call<QuizResponse>, response: Response<QuizResponse>) {
                 val body = response.body()
+                Log.d("API_CALL", "Respuesta recibida: ${response.body()}")
                 if (body != null) {
                     questions = DoublyLinkedList<Question>()
                     for (questionResponse in body.preguntas.shuffled().take(questionCount as Int)) {
+                        val answersList = questionResponse.opciones.map { option ->
+                            Answer(
+                                text = option.text,
+                                isCorrectAnswer = option.isCorrectAnswer,
+                                hasImage = option.hasImage
+                            )
+                        }
                         val question = Question(
                             questionText = questionResponse.texto,
-                            answers = questionResponse.opciones,
-                            correctAnswerIndex = questionResponse.respuestaCorrecta.toInt(),
+                            answers = answersList,
                             imageResource = null // Aquí puedes agregar la lógica para manejar la imagen si la tienes
                         )
                         questions.addLast(question)
                     }
+
                     currentQuestion = questions.removeFirst()
                     displayQuestion(currentQuestion)
+
+                    nextButton.isEnabled = true  // Activa el botón después de inicializar questions
+                    loadingProgress.visibility = View.GONE  // Oculta el ProgressBar
                 }
             }
 
             override fun onFailure(call: Call<QuizResponse>, t: Throwable) {
+                Log.d("API_CALL", "Fallo en la llamada: ${t.message}")
                 t.printStackTrace()
             }
         })
     }
 
     private fun displayQuestion(question: Question?) {
-        if (question != null) {
-            questionText.text = question.questionText
-            answer1.text = question.answers[0]
-            answer2.text = question.answers[1]
-            answer3.text = question.answers[2]
-            answer4.text = question.answers[3]
+        question?.let {
+            questionText.text = it.questionText
+            answer1.text = it.answers[0].text
+            answer2.text = it.answers[1].text
+            answer3.text = it.answers[2].text
+            answer4.text = it.answers[3].text
             answerGroup.clearCheck()
-        } else {
-            // Aquí puedes manejar el caso cuando noPerdón por el corte. Aquí está el código completo:
 
+            userAnswers[it]?.let { selectedAnswer ->
+                when (selectedAnswer) {
+                    0 -> answer1.isChecked = true
+                    1 -> answer2.isChecked = true
+                    2 -> answer3.isChecked = true
+                    3 -> answer4.isChecked = true
+                }
+            }
         }
     }
 }

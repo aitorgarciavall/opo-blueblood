@@ -23,13 +23,33 @@
             android:textSize="32sp" />
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/loading_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="visible"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Space
-            android:layout_width="150dp"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/previous_button"
+            android:layout_width="114dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Anterior"
+            android:visibility="visible" />
+
+        <Space
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
@@ -62,7 +82,7 @@
             android:textColor="@color/google_button_background" />
 
         <Space
-            android:layout_width="50dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
@@ -118,7 +138,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="50dp" />
+                    android:layout_height="25dp" />
 
                 <RadioButton
                     android:id="@+id/answer_2"
@@ -133,7 +153,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="50dp" />
+                    android:layout_height="25dp" />
 
                 <RadioButton
                     android:id="@+id/answer_3"
@@ -148,7 +168,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="50dp" />
+                    android:layout_height="25dp" />
 
                 <RadioButton
                     android:id="@+id/answer_4"
@@ -163,7 +183,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="50dp" />
+                    android:layout_height="25dp" />
 
 
             </RadioGroup>

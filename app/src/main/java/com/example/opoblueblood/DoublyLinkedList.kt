@@ -62,4 +62,24 @@ class DoublyLinkedList<E> {
         size--
         return removedItem
     }
+
+    fun getCurrent(): E? = head?.item
+
+    fun getPrevious(): E? {
+        if (head?.prev != null) {
+            head = head?.prev
+            return head?.item
+        }
+        return null
+    }
+
+    fun getNext(): E? {
+        if (head?.next != null) {
+            head = head?.next
+            return head?.item
+        }
+        return null
+    }
+
+
 }
