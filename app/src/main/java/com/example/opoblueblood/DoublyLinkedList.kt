@@ -38,6 +38,8 @@ class DoublyLinkedList<E> {
         }
     }
 
+    fun getFirst(): E? = head?.item
+
     fun removeFirst(): E? {
         if (isEmpty()) return null
 

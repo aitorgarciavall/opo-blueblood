@@ -196,7 +196,7 @@ class TestActivity : AppCompatActivity() {
                         questions.addLast(question)
                     }
 
-                    currentQuestion = questions.removeFirst()
+                    currentQuestion = questions.getFirst()
                     displayQuestion(currentQuestion)
 
                     nextButton.isEnabled = true  // Activa el botón después de inicializar questions
