@@ -87,7 +87,6 @@ class TestActivity : AppCompatActivity() {
         nextButton.setOnClickListener {
             //currentQuestion = questions.removeFirst()
             currentQuestion = questions.getNext()
-            displayQuestion(currentQuestion)
             resultText.text = ""
             checkButton.isEnabled = true // Habilita el botón "check" nuevamente
             answerGroup.clearCheck() // Limpia la selección en los radio buttons
@@ -103,6 +102,9 @@ class TestActivity : AppCompatActivity() {
             answer2.isEnabled = true
             answer3.isEnabled = true
             answer4.isEnabled = true
+
+
+            displayQuestion(currentQuestion)
 
             // Actualizar la posición
             position += 1
@@ -146,6 +148,10 @@ class TestActivity : AppCompatActivity() {
                 else -> null
             }
 
+
+            // Marca la resposta com a comprovada
+            questions.getCurrent()?.answers?.get(selectedAnswerIndex)?.checked = true
+
             if (currentQuestion?.isAnswerCorrect(selectedAnswerIndex) == true) {
                 resultText.text = "Correcte!"
                 selectedRadioButton?.isChecked = true
@@ -156,6 +162,7 @@ class TestActivity : AppCompatActivity() {
                 answer2.isEnabled = false
                 answer3.isEnabled = false
                 answer4.isEnabled = false
+
             } else {
                 resultText.text = "Incorrecte!"
                 selectedRadioButton?.isChecked = true
@@ -220,6 +227,7 @@ class TestActivity : AppCompatActivity() {
             answer4.text = it.answers[3].text
             answerGroup.clearCheck()
 
+            /*
             userAnswers[it]?.let { selectedAnswer ->
                 when (selectedAnswer) {
                     0 -> answer1.isChecked = true
@@ -228,6 +236,22 @@ class TestActivity : AppCompatActivity() {
                     3 -> answer4.isChecked = true
                 }
             }
+
+             */
+            currentQuestion?.answers?.let { answers ->
+                answer1.isChecked = answers.size > 0 && answers[0].checked
+                answer1.isSelected = answers.size > 0 && answers[0].checked && !answers[0].isCorrectAnswer
+
+                answer2.isChecked = answers.size > 1 && answers[1].checked
+                answer2.isSelected = answers.size > 1 && answers[1].checked && !answers[1].isCorrectAnswer
+
+                answer3.isChecked = answers.size > 2 && answers[2].checked
+                answer3.isSelected = answers.size > 2 && answers[2].checked && !answers[2].isCorrectAnswer
+
+                answer4.isChecked = answers.size > 3 && answers[3].checked
+                answer4.isSelected = answers.size > 3 && answers[3].checked && !answers[3].isCorrectAnswer
+            }
+
         }
     }
 }
