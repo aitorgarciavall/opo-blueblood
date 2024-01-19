@@ -30,7 +30,7 @@ class AuthActivity : AppCompatActivity() {
     private fun setup(){
         title = "Autenticació"
 
-        val signUpButton: Button = findViewById(R.id.logOutButton)
+        val signUpButton: Button = findViewById(R.id.signUpButton)
         val emailEditText: EditText = findViewById(R.id.emailEditText)
         val passwordEditText: EditText = findViewById(R.id.passwordEditText)
         val loginButton: Button = findViewById(R.id.logInButton)

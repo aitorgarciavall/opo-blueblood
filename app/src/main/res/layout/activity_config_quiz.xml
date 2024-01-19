@@ -1,39 +1,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/question_count_dialog"
     android:background="@drawable/background_color"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <RadioGroup
         android:id="@+id/question_count_radio_group"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp">
 
-        <RadioButton
+        <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/question_count_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="10 preguntas"/>
+            android:text="10 preguntas"
+            android:textColor="@android:color/white"
+            app:buttonTint="#DBFF01"/>
 
-        <RadioButton
+        <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/question_count_20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="20 preguntas"/>
+            android:text="20 preguntas"
+            android:textColor="@android:color/white"
+            app:buttonTint="#DBFF01"/>
 
-        <RadioButton
+        <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/question_count_30"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="30 preguntas"/>
+            android:text="30 preguntas"
+            android:textColor="@android:color/white"
+            app:buttonTint="#DBFF01"/>
 
     </RadioGroup>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/start_quiz_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar Test"/>
-
+        android:text="Iniciar Test"
+        app:cornerRadius="4dp"
+        android:textColor="@android:color/black"
+        android:backgroundTint="#DBFF01"/>
 </LinearLayout>

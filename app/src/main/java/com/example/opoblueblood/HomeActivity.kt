@@ -3,11 +3,8 @@ package com.example.opoblueblood
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Window
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 
 enum class ProviderType{
@@ -35,7 +32,7 @@ class HomeActivity : AppCompatActivity() {
     private fun setup(email: String, provider: String){
 
 
-        val logOutButton: ImageView = findViewById(R.id.logOutButton)
+        val logOutButton: ImageView = findViewById(R.id.signUpButton)
 
 
         logOutButton.setOnClickListener {
